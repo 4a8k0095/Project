@@ -5,18 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    #region Singleton
-    private static GameManager _instance;
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-                _instance = FindObjectOfType<GameManager>();
-            return _instance;
-        }
-    }
-    #endregion
+    public static GameManager Instance;
 
     [Header("Animal Prefab")]
     [SerializeField] private GameObject lambPrefab;
@@ -86,6 +75,14 @@ public class GameManager : MonoBehaviour
         fast
     }
     public PlaySpeed playSpeed = PlaySpeed.normal;
+
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = FindObjectOfType<GameManager>();
+        else
+            Destroy(gameObject);
+    }
 
     private void Update()
     {
