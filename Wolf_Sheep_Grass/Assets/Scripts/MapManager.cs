@@ -6,21 +6,10 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    #region Singleton
-    private static MapManager instance;
-    public static MapManager Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = FindObjectOfType<MapManager>();
-            return instance;
-        }
-    }
-    #endregion
+    public static MapManager Instance;
 
     [Header("Map Size")]
-    public Tile[,] tiles;
+    public Tile[,] mapTiles;
     [SerializeField] private int xSize = 20;
     public int XSize
     {
@@ -44,7 +33,15 @@ public class MapManager : MonoBehaviour
     public List<Tile> grassTiles;
     [SerializeField] private List<Tile> groundTiles;
 
-    void Awake()
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = FindObjectOfType<MapManager>();
+        else
+            Destroy(this.gameObject);
+    }
+
+    private void Start()
     {
         InitializeMap();
     }
@@ -58,22 +55,22 @@ public class MapManager : MonoBehaviour
         SpawnGrass(INITIAL_GRASS_COUNT);
 
         int spawnLambCount = MyUtility.GetRandomNum(0, 10);
-        GameManager.Instance.SpawnLamb(tiles, spawnLambCount);
+        GameManager.Instance.SpawnLamb(mapTiles, spawnLambCount);
 
         int initialSheepCount = GameManager.Instance.InitialSheepCount;
-        GameManager.Instance.SpawnSheep(tiles, initialSheepCount - spawnLambCount);
+        GameManager.Instance.SpawnSheep(mapTiles, initialSheepCount - spawnLambCount);
 
-        GameManager.Instance.SpawnDog(tiles);
+        GameManager.Instance.SpawnDog(mapTiles);
 
         int initialSpawnWolfRound = GameManager.Instance.InitialSpawnWolfRound;
-        StartCoroutine(GameManager.Instance.SpawnWolf(tiles, initialSpawnWolfRound));
+        StartCoroutine(GameManager.Instance.SpawnWolf(mapTiles, initialSpawnWolfRound));
     }
 
     // 依據 MapSize 創建地圖格
     // 大小 = xSize * ySize
     private void CreateTile()
     {
-        tiles = new Tile[xSize, ySize];
+        mapTiles = new Tile[xSize, ySize];
 
         for (int x = 0; x < xSize; x++)
         {
@@ -88,7 +85,7 @@ public class MapManager : MonoBehaviour
                 SpriteRenderer tileSpriteRenderer = tileInstance.GetComponent<SpriteRenderer>();
                 tileSpriteRenderer.sprite = groundTile;
                 // 創建Tile類別並加入List，方便後續使用
-                Tile _groundTile = tiles[x, y] = new Tile(true, tileInstance.transform.position, x, y, tileInstance);
+                Tile _groundTile = mapTiles[x, y] = new Tile(true, tileInstance.transform.position, x, y, tileInstance);
                 groundTiles.Add(_groundTile);
             }
         }
@@ -111,7 +108,7 @@ public class MapManager : MonoBehaviour
             while (grassCount < _count)
             {
                 // 取得隨機普通地板
-                Tile targetTile = MyUtility.GetRandomTile(tiles);
+                Tile targetTile = MyUtility.GetRandomTile(mapTiles);
 
                 // 替換sprite
                 SpriteRenderer tileSpriteRenderer = targetTile.tileObject.transform.GetComponent<SpriteRenderer>();

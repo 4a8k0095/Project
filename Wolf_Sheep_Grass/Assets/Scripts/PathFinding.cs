@@ -86,7 +86,7 @@ public class PathFinding
                     checkY >= 0 && checkY < MapManager.Instance.YSize)
                 {
                     // 將周圍找到的格子加入 neighbours List
-                    neighbours.Add(MapManager.Instance.tiles[checkX, checkY]);
+                    neighbours.Add(MapManager.Instance.mapTiles[checkX, checkY]);
                 }
             }
         }

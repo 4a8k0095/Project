@@ -27,7 +27,7 @@ public class Animal
         step = _step;
 
         pathFinding = new PathFinding();
-        tiles = MapManager.Instance.tiles;
+        tiles = MapManager.Instance.mapTiles;
     }
 
     public virtual void Eat(Tile targetTile)

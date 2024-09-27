@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
             Instance = FindObjectOfType<GameManager>();
         else
-            Destroy(gameObject);
+            Destroy(this.gameObject);
     }
 
     private void Update()
@@ -139,11 +139,11 @@ public class GameManager : MonoBehaviour
         {
             if (sheeps.Count > 10)
             {
-                SpawnLamb(MapManager.Instance.tiles, 1);
+                SpawnLamb(MapManager.Instance.mapTiles, 1);
             }
             else if (sheeps.Count <= 10)
             {
-                SpawnLamb(MapManager.Instance.tiles, 2);
+                SpawnLamb(MapManager.Instance.mapTiles, 2);
             }
         }
 
@@ -290,12 +290,12 @@ public class GameManager : MonoBehaviour
             wolves.Add(wolf);
             tilesFromWolf.Add(wolf.currentTile);
 
-            StartCoroutine(SpawnWolf(MapManager.Instance.tiles, randomRound));
+            StartCoroutine(SpawnWolf(MapManager.Instance.mapTiles, randomRound));
         }
         // 地圖上有狼不創建，直接呼叫下一次生成
         else
         {
-            StartCoroutine(SpawnWolf(MapManager.Instance.tiles, randomRound));
+            StartCoroutine(SpawnWolf(MapManager.Instance.mapTiles, randomRound));
         }
     }
 }
