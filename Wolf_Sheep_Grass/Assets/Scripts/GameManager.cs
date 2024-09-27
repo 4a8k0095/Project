@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -68,6 +69,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public List<Tile> tilesFromWolf = new List<Tile>();
 
     private bool action = false;
+    [Header("Button")]
+    [SerializeField] private Button nextRoundBtn;
+    [SerializeField] private Button playToEndBtn;
 
     public enum PlaySpeed
     {
@@ -82,6 +86,12 @@ public class GameManager : MonoBehaviour
             Instance = FindObjectOfType<GameManager>();
         else
             Destroy(this.gameObject);
+    }
+
+    private void Start()
+    {
+        nextRoundBtn.onClick.AddListener(EnterNextRound);
+        playToEndBtn.onClick.AddListener(PlayToEnd);
     }
 
     private void Update()
